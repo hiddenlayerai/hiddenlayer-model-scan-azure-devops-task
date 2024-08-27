@@ -1,0 +1,22 @@
+{
+  "name": "Model Scanner",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/_suite.js"
+  },
+  "keywords": [],
+  "author": "HiddenLayer",
+  "license": "Apache-2.0",
+  "description": "HiddenLayer Model Scanner for Azure DevOps",
+  "dependencies": {
+    "azure-pipelines-task-lib": "^4.17.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.5.0",
+    "@types/q": "^1.5.8",
+    "mocha": "^10.7.3",
+    "sync-request": "^6.1.0"
+  }
+}
