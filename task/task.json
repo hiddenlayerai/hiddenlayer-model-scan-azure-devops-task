@@ -12,17 +12,49 @@
       "Minor": 1,
       "Patch": 0
   },
-  "instanceNameFormat": "Echo $(samplestring)",
+  "instanceNameFormat": "HiddenLayer Model Scan for $(modelPath)",
   "inputs": [
       {
-          "name": "samplestring",
+          "name": "modelPath",
           "type": "string",
-          "label": "Sample String",
+          "label": "Path to the model",
           "defaultValue": "",
           "required": true,
-          "helpMarkDown": "A sample string"
+          "helpMarkDown": "Path to the model"
+      },
+      {
+        "name": "apiUrl",
+        "type": "string",
+        "label": "URL to the HiddenLayer API if you're using the OEM/self-hosted verision",
+        "defaultValue": "https://api.us.hiddenlayer.ai",
+        "required": true,
+        "helpMarkDown": "URL to th HiddenLayer API"
+      },
+      {
+        "name": "failOnDetection",
+        "type": "boolean",
+        "label": "True to fail the pipeline if a model is deemed malicious",
+        "defaultValue": true,
+        "required": true,
+        "helpMarkDown": "True to fail the pipeline if a model is deemed malicious"
+      },
+      {
+        "name": "hlClientID",
+        "type": "string",
+        "label": "Your HiddenLayer API Client ID",
+        "defaultValue": "",
+        "required": false,
+        "helpMarkDown": "(required for SaaS only): Your HiddenLayer API Client ID"
+      },
+      {
+        "name": "hlClientSecret",
+        "type": "string",
+        "label": "Your HiddenLayer API Client Secret",
+        "defaultValue": "",
+        "required": false,
+        "helpMarkDown": "(required for SaaS only): Your HiddenLayer API Client Secret"
       }
-  ],
+],
   "execution": {
       "Node20_1": {
           "target": "index.js"

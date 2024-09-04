@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "lint": "eslint",
     "test": "mocha tests/_suite.js"
   },
   "keywords": [],
@@ -10,6 +12,7 @@
   "license": "Apache-2.0",
   "description": "HiddenLayer Model Scanner for Azure DevOps",
   "dependencies": {
+    "@hiddenlayerai/hiddenlayer-sdk": "^0.3.1-alpha",
     "azure-pipelines-task-lib": "^4.17.0"
   },
   "devDependencies": {

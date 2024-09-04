@@ -2,7 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tmrm = require("azure-pipelines-task-lib/mock-run");
 const path = require("path");
+const process_1 = require("process");
 let taskPath = path.join(__dirname, '..', 'index.js');
 let tmr = new tmrm.TaskMockRunner(taskPath);
-tmr.setInput('samplestring', 'human');
+console.log(__dirname);
+tmr.setInput('modelPath', __dirname + '/models/safe_model.pkl');
+tmr.setInput('hlClientID', process_1.env['HL_CLIENT_ID'] || '');
+tmr.setInput('hlClientSecret', process_1.env['HL_CLIENT_SECRET'] || '');
 tmr.run();
