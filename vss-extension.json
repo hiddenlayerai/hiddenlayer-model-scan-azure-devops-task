@@ -1,0 +1,36 @@
+{
+  "manifestVersion": 1,
+  "id": "model-scanner-task",
+  "name": "HiddenLayer Model Scanner",
+  "version": "0.0.1",
+  "publisher": "hiddenlayer",
+  "targets": [
+      {
+          "id": "Microsoft.VisualStudio.Services"
+      }
+  ],    
+  "description": "HiddenLayer Model Scanner for Azure DevOps",
+  "categories": [
+      "Azure Pipelines"
+  ],
+  "icons": {
+      "default": "images/extension-icon.png"        
+  },
+  "files": [
+      {
+          "path": "task"
+      }
+  ],
+  "contributions": [
+      {
+          "id": "custom-build-release-task",
+          "type": "ms.vss-distributed-task.task",
+          "targets": [
+              "ms.vss-distributed-task.tasks"
+          ],
+          "properties": {
+              "name": "task"
+          }
+      }
+  ]
+}
