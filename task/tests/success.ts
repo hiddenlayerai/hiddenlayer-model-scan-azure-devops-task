@@ -1,11 +1,11 @@
-import ma = require('azure-pipelines-task-lib/mock-answer');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import tmrm = require('azure-pipelines-task-lib/mock-run');
-import { dir } from 'console';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import path = require('path');
 import { env } from 'process';
 
-let taskPath = path.join(__dirname, '..', 'index.js');
-let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
+const taskPath = path.join(__dirname, '..', 'index.js');
+const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 console.log(__dirname);
 tmr.setInput('modelPath', __dirname + '/models/safe_model.pkl')

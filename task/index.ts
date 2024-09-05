@@ -1,4 +1,5 @@
 import { HiddenLayerServiceClient } from '@hiddenlayerai/hiddenlayer-sdk';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import tl = require('azure-pipelines-task-lib/task');
 
 async function run() {
@@ -27,6 +28,7 @@ async function run() {
             tl.setResult(tl.TaskResult.Succeeded, 'Model is safe. No safety checks failed.');
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
         tl.setResult(tl.TaskResult.Failed, err.message);
     }

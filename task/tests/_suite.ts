@@ -15,8 +15,8 @@ describe('Sample task tests', function () {
     it('should succeed if passed a safe model', function(done: Mocha.Done) {
       this.timeout(10000);
   
-      let tp: string = path.join(__dirname, 'success.js');
-      let tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+      const tp: string = path.join(__dirname, 'success.js');
+      const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
   
       tr.runAsync().then(() => {
           assert.equal(tr.succeeded, true, 'should have succeeded');
@@ -32,8 +32,8 @@ describe('Sample task tests', function () {
   it('it should fail if tool returns 1', function(done: Mocha.Done) {
     this.timeout(10000);
 
-    let tp = path.join(__dirname, 'failure.js');
-    let tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+    const tp = path.join(__dirname, 'failure.js');
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.runAsync().then(() => {
       console.log(tr);

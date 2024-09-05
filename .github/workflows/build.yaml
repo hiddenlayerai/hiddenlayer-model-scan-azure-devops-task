@@ -41,6 +41,14 @@ jobs:
                 ${{ runner.os }}-build-
                 ${{ runner.os }}-
 
+      - name: Lint Code
+        working-directory: ./task
+        run: npm run lint
+
+      - name: Build
+        working-directory: ./task
+        run: npm run build
+
       - name: Run tests
         working-directory: ./task
         run: npm run test
