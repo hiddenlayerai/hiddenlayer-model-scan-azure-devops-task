@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "package": "tfx extension create --manifest-globs vss-extension.json"
+    "package": "tfx extension create --manifest-globs vss-extension.json --output-path hiddenlayer.model-scanner-task.vsix",
+    "publish": "tfx extension publish --vsix hiddenlayer.model-scanner-task.vsix --token $PAT"
   },
   "devDependencies": {
     "tfx-cli": "^0.17.0"
