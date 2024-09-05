@@ -25,10 +25,10 @@
       {
         "name": "apiUrl",
         "type": "string",
-        "label": "URL to the HiddenLayer API if you're using the OEM/self-hosted verision",
+        "label": "URL to the HiddenLayer API if you're using the OEM/self-hosted version",
         "defaultValue": "https://api.us.hiddenlayer.ai",
         "required": true,
-        "helpMarkDown": "URL to th HiddenLayer API"
+        "helpMarkDown": "URL to the HiddenLayer API"
       },
       {
         "name": "failOnDetection",

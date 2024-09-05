@@ -16,15 +16,15 @@ async function run() {
 
         let detected = false;
         if (results.detections.length > 0) {
-            console.log(`Found ${results.detections.length} detections`);
+            console.log(`Model failed ${results.detections.length} safety checks.`);
             detected = true
         }
 
         if (detected) {
             const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
-            tl.setResult(taskResult, 'Model has detections');
+            tl.setResult(taskResult, 'Model failed one or more safety checks.');
         } else {
-            tl.setResult(tl.TaskResult.Succeeded, 'Model is clean');
+            tl.setResult(tl.TaskResult.Succeeded, 'Model is safe. No safety checks failed.');
         }
     }
     catch (err:any) {
