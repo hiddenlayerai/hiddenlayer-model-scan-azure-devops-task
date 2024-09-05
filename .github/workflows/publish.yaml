@@ -1,0 +1,37 @@
+name: Release & Publish
+
+on:
+  pull_request: {}
+  release:
+    types:
+      - published
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      # - name: Validate vss-extension version matches release tag
+      #   run: |
+      #     VERSION=$(cat vss-extension.json | jq -r .version)
+      #     if [ "v$VERSION" != "${GITHUB_REF/refs\/tags\//}" ]; then
+      #       echo "Version mismatch: vss-extension.json version is $VERSION, but release tag is ${GITHUB_REF/refs\/tags\//}"
+      #       exit 1
+      #     fi
+
+  publish:
+    runs-on: ubuntu-22.04
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install modules
+        run: npm install
+      - name: Install talk modules
+        working-directory: ./task
+        run: npm install
+      - name: Build task
+        working-directory: ./task
+        run: npm run build
+      - name: Package extension
+        run: npm run package
