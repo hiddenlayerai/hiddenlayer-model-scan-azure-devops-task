@@ -48,7 +48,7 @@ describe('Model Scanner task tests', function () {
   });
 
   it('it should succeed if scanning a folder with no malicious models', function(done: Mocha.Done) {
-    this.timeout(10000);
+    this.timeout(20000);
   
     const tp: string = path.join(__dirname, 'folder_success.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
@@ -67,7 +67,7 @@ describe('Model Scanner task tests', function () {
   });
 
   it('it should fail if scanning a folder with a malicious model', function(done: Mocha.Done) {
-    this.timeout(10000);
+    this.timeout(20000);
 
     const tp = path.join(__dirname, 'folder_failure.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);

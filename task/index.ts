@@ -2,6 +2,7 @@ import { HiddenLayerServiceClient } from '@hiddenlayerai/hiddenlayer-sdk';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import tl = require('azure-pipelines-task-lib/task');
 import * as fs from 'fs';
+import * as path from 'path';
 
 async function run() {
     try {
@@ -15,7 +16,7 @@ async function run() {
         if (stats.isDirectory()) {
             let anyDetected = false;
             fs.readdirSync(modelPath).forEach(async file => {
-                const detected = await scanFile(clientId, clientSecret, apiUrl, modelPath + '/' + file);
+                const detected = await scanFile(clientId, clientSecret, apiUrl, path.join(modelPath, file));
                 if (detected) {
                     const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
                     tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
