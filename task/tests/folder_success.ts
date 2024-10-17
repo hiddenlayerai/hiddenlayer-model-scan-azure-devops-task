@@ -17,5 +17,6 @@ console.log(__dirname);
 tmr.setInput('modelPath', tmpdir)
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
+tmr.setInput('failOnDetections', 'true');
 
 tmr.run();

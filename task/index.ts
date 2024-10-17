@@ -10,20 +10,21 @@ async function run() {
         const clientId: string = tl.getInput('hlClientId', false) || "";
         const clientSecret: string = tl.getInput('hlClientSecret', false) || "";
         const modelPath: string = tl.getInput('modelPath', true) || "";
-        const failOnDetections: boolean = tl.getBoolInput('failOnDetections', false) || true;
+        const failOnDetections: boolean = tl.getBoolInput('failOnDetections', false);
 
         const stats = fs.statSync(modelPath);
         if (stats.isDirectory()) {
             let anyDetected = false;
-            fs.readdirSync(modelPath).forEach(async file => {
+            await Promise.all(fs.readdirSync(modelPath).map(async file => {
                 const detected = await scanFile(clientId, clientSecret, apiUrl, path.join(modelPath, file));
                 if (detected) {
-                    const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
-                    tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
                     anyDetected = true;
                 }
-            });
-            if (!anyDetected) {
+            }));
+            if (anyDetected) {
+                const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
+                tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
+            } else {
                 tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
             }
         } else {
@@ -38,6 +39,7 @@ async function run() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
+        console.log(err);
         tl.setResult(tl.TaskResult.Failed, err.message);
     }
 }

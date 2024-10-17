@@ -10,5 +10,6 @@ const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 tmr.setInput('modelPath', __dirname + '/models/')
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
+tmr.setInput('failOnDetections', 'true');
 
 tmr.run();
