@@ -9,7 +9,7 @@
   "author": "HiddenLayer",
   "version": {
       "Major": 0,
-      "Minor": 1,
+      "Minor": 3,
       "Patch": 0
   },
   "instanceNameFormat": "HiddenLayer Model Scan for $(modelPath)",
