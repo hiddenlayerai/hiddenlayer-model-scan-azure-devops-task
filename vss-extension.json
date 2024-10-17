@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "model-scanner-task",
   "name": "HiddenLayer Model Scanner",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "publisher": "hiddenlayer",
   "targets": [
       {

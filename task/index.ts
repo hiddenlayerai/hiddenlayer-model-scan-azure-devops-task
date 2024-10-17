@@ -22,11 +22,10 @@ async function run() {
                     tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
                     anyDetected = true;
                 }
-                if (!anyDetected) {
-                    tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
-                }
             });
-
+            if (!anyDetected) {
+                tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
+            }
         } else {
             const detected = await scanFile(clientId, clientSecret, apiUrl, modelPath);
             if (detected) {
