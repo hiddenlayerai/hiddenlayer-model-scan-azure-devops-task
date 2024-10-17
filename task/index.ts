@@ -39,7 +39,6 @@ async function run() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
-        console.log(err);
         tl.setResult(tl.TaskResult.Failed, err.message);
     }
 }
