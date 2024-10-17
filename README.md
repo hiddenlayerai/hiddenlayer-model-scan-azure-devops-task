@@ -5,19 +5,19 @@ Integrate model scanning into your continuous integration (CI) process with Hidd
 ## Installation
 
 To use this Azure DevOps task, you must install it into your Azure DevOps organization. You can do this by following the steps below:
-* Browse to the Organization Settings.
+* Browse to the Organization Settings
 * Click on Extensions
 * Click on "Browse Marketplace"
 * Search for "HiddenLayer Model Scanner"
-* Install the extension.
+* Install the extension
 
 ## Inputs
 
-`modelPath` (required): Path to the model(s), can either be a path to a single model in the repo, or a folder containing the model(s) in the repo.
+`modelPath` (required): Path to the model(s), can either be a path to a single model in the repo, or a folder containing the model(s) in the repo
 
 `apiUrl`: URL to the HiddenLayer API if you're using the OEM/self hosted version. Defaults to `https://api.us.hiddenlayer.ai`
 
-`failOnDetection`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`.
+`failOnDetection`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`
 
 `hlClientID` (**required for SaaS only**): Your HiddenLayer API Client ID
 
