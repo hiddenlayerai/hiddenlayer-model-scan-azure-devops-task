@@ -3,7 +3,7 @@
   "public": true,
   "id": "model-scanner-task",
   "name": "HiddenLayer Model Scanner",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "hiddenlayer",
   "targets": [
       {
@@ -14,6 +14,11 @@
   "categories": [
       "Azure Pipelines"
   ],
+  "content": {
+      "details": {
+          "path": "overview.md"
+      }
+  },
   "icons": {
       "default": "images/extension-icon.png"        
   },
