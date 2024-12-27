@@ -4,6 +4,6 @@
     "publish": "tfx extension publish --vsix hiddenlayer.model-scanner-task.vsix --token $PAT"
   },
   "devDependencies": {
-    "tfx-cli": "^0.17.0"
+    "tfx-cli": "^0.18.0"
   }
 }
