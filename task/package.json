@@ -24,6 +24,6 @@
     "eslint": "^9.9.1",
     "mocha": "^10.7.3",
     "sync-request": "^6.1.0",
-    "typescript-eslint": "^8.4.0"
+    "typescript-eslint": "^8.23.0"
   }
 }
