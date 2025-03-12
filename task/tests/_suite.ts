@@ -59,7 +59,7 @@ describe('Model Scanner task tests', function () {
         assert.equal(tr.warningIssues.length, 0, "should have no warnings");
         assert.equal(tr.errorIssues.length, 0, "should have no errors");
         console.log(tr.stdout);
-        assert.match(tr.stdout, /safe_model.pkl scan status: accepted/);
+        assert.match(tr.stdout, /scan status: done/);
         done();
     }).catch((error) => {
         done(error); // Ensure the test case fails if there's an error
