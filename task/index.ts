@@ -50,8 +50,8 @@ async function scanFile(clientId: string, clientSecret: string, apiUrl: string, 
     const results = await client.modelScanner.scanFile(modelName, modelPath);
 
     let detected = false;
-    if (results.detections.length > 0) {
-        console.log(`Model failed ${results.detections.length} safety checks.`);
+    if (results.detectionCount > 0) {
+        console.log(`Model failed ${results.detectionCount} safety checks.`);
         detected = true
     }
 
