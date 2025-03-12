@@ -3,7 +3,7 @@
   "public": true,
   "id": "model-scanner-task",
   "name": "HiddenLayer Model Scanner",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "publisher": "hiddenlayer",
   "targets": [
       {
