@@ -1,8 +1,7 @@
-import { HiddenLayerServiceClient } from '@hiddenlayerai/hiddenlayer-sdk';
+import { HiddenLayerServiceClient, ScanReportV3 } from '@hiddenlayerai/hiddenlayer-sdk';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import tl = require('azure-pipelines-task-lib/task');
 import * as fs from 'fs';
-import * as path from 'path';
 
 async function run() {
     try {
@@ -12,29 +11,26 @@ async function run() {
         const modelPath: string = tl.getInput('modelPath', true) || "";
         const failOnDetections: boolean = tl.getBoolInput('failOnDetections', false);
 
+        const client = HiddenLayerServiceClient.createSaaSClient(clientId, clientSecret, apiUrl);
+
         const stats = fs.statSync(modelPath);
+        const splitResult = modelPath.split('/');
+        if (splitResult[splitResult.length - 1] === '' ) {
+            splitResult.pop();
+        }
+        const modelName: string = splitResult.pop() || 'model';
+        let results;
         if (stats.isDirectory()) {
-            let anyDetected = false;
-            await Promise.all(fs.readdirSync(modelPath).map(async file => {
-                const detected = await scanFile(clientId, clientSecret, apiUrl, path.join(modelPath, file));
-                if (detected) {
-                    anyDetected = true;
-                }
-            }));
-            if (anyDetected) {
-                const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
-                tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
-            } else {
-                tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
-            }
+            results = await client.modelScanner.scanFolder(modelName, modelPath);
         } else {
-            const detected = await scanFile(clientId, clientSecret, apiUrl, modelPath);
-            if (detected) {
-                const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
-                tl.setResult(taskResult, 'Model failed one or more safety checks.');
-            } else {
-                tl.setResult(tl.TaskResult.Succeeded, 'Model is safe. No safety checks failed.');
-            }
+            results = await client.modelScanner.scanFile(modelName, modelPath);
+        }
+        const anyDetected = await hasDetections(results);
+        if (anyDetected) {
+            const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
+            tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
+        } else {
+            tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,19 +39,9 @@ async function run() {
     }
 }
 
-async function scanFile(clientId: string, clientSecret: string, apiUrl: string, modelPath: string): Promise<boolean> {
-    // TODO: Handle Enterprise client creation
-    const modelName: string = modelPath.split('/').pop() || 'model';
-    const client = HiddenLayerServiceClient.createSaaSClient(clientId, clientSecret, apiUrl);
-    const results = await client.modelScanner.scanFile(modelName, modelPath);
-
-    let detected = false;
-    if (results.detectionCount > 0) {
-        console.log(`Model failed ${results.detectionCount} safety checks.`);
-        detected = true
-    }
-
-    return detected;
+async function hasDetections(scanReport: ScanReportV3): Promise<boolean> {
+    console.log(`Model failed ${scanReport.detectionCount} safety checks.`);
+    return scanReport.detectionCount > 0;
 }
 
 run();
