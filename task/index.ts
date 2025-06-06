@@ -37,7 +37,7 @@ async function run() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
         if (err instanceof ResponseError) {
-            let body = await err.response.json();
+            const body = await err.response.json();
             tl.setResult(tl.TaskResult.Failed, err.message + ' status code: ' + err.response.status + ' body: ' + JSON.stringify(body));
         } else {
             tl.setResult(tl.TaskResult.Failed, err.message);
