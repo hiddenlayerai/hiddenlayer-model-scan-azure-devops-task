@@ -1,4 +1,4 @@
-import { HiddenLayerServiceClient, ScanReportV3 } from '@hiddenlayerai/hiddenlayer-sdk';
+import { HiddenLayerServiceClient, ScanReportV3, ResponseError } from '@hiddenlayerai/hiddenlayer-sdk';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import tl = require('azure-pipelines-task-lib/task');
 import * as fs from 'fs';
@@ -16,6 +16,7 @@ async function run() {
         const stats = fs.statSync(modelPath);
         const splitResult = modelPath.split('/');
         if (splitResult[splitResult.length - 1] === '' ) {
+            // model path was a folder, so get rid of extra element
             splitResult.pop();
         }
         const modelName: string = splitResult.pop() || 'model';
@@ -35,7 +36,12 @@ async function run() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
-        tl.setResult(tl.TaskResult.Failed, err.message);
+        if (err instanceof ResponseError) {
+            let body = await err.response.json();
+            tl.setResult(tl.TaskResult.Failed, err.message + ' status code: ' + err.response.status + ' body: ' + JSON.stringify(body));
+        } else {
+            tl.setResult(tl.TaskResult.Failed, err.message);
+        }
     }
 }
 
