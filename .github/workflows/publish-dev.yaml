@@ -16,10 +16,10 @@ jobs:
       - name: Check if prerelease
         run: |
           if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
-            echo "This is a prerelease, skipping release actions."
-            exit 1
+            echo "This is a prerelease, continuing with prerelease actions."
           else
-            echo "This is a release, continuing with release actions."
+            echo "This is a release, skipping prerelease actions."
+            exit 1
           fi
       - name: Harden Runner
         uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
@@ -54,6 +54,6 @@ jobs:
         working-directory: ./task
         run: npm run build
       - name: Package extension
-        run: npm run package
+        run: npm run package-dev
       - name: Publish extension
-        run: PAT=${{ secrets.AZURE_DEVOPS_MARKETPLACE_PAT }} npm run publish
+        run: PAT=${{ secrets.AZURE_DEVOPS_MARKETPLACE_PAT }} npm run publish-dev
