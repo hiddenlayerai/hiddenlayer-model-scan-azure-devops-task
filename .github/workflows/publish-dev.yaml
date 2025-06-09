@@ -30,8 +30,9 @@ jobs:
       - name: Validate vss-extension version matches release tag
         run: |
           VERSION=$(cat vss-extension.json | jq -r .version)
+          VERSION+=-dev
           if [ "v$VERSION" != "${GITHUB_REF/refs\/tags\//}" ]; then
-            echo "Version mismatch: vss-extension.json version is $VERSION, but release tag is ${GITHUB_REF/refs\/tags\//}"
+            echo "Version mismatch: vss-extension.json dev version is $VERSION, but release tag is ${GITHUB_REF/refs\/tags\//}"
             exit 1
           fi
 
