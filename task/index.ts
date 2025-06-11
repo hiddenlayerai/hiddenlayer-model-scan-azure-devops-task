@@ -76,7 +76,7 @@ function makeGithubCompatibleSarif(sarifOutput: Sarif210): Sarif210 {
         for (const result of run.results || []) {
             for (const location of result.locations || []) {
                 if (location.physicalLocation?.artifactLocation?.uri) {
-                    let uri = new URL(location.physicalLocation.artifactLocation.uri);
+                    const uri = new URL(location.physicalLocation.artifactLocation.uri);
                     uri.protocol = 'file:';
                     location.physicalLocation.artifactLocation.uri = uri.toString();
                 }
