@@ -8,12 +8,12 @@ const taskPath = path.join(__dirname, '..', 'index.js');
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 console.log(__dirname);
-tmr.setInput('modelPath', 'microsoft/DialoGPT-medium');
+tmr.setInput('modelPath', 'ScanMe/Models');
 tmr.setInput('apiUrl', process.env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', process.env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', process.env['HL_CLIENT_SECRET'] || '');
 tmr.setInput('failOnDetections', 'false');
-tmr.setInput('sarifFile', __dirname + '/results/results.sarif');
+tmr.setInput('sarifFile', __dirname + '/results/results_community_scan_success_without_fail_on_detections.sarif');
 tmr.setInput('communityScan', 'HUGGING_FACE');
 tmr.setInput('modelVersion', 'main');
 
