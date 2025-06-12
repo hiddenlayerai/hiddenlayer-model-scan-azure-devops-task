@@ -126,4 +126,12 @@ describe('Model Scanner task tests', function () {
       done(error); // Ensure the test case fails if there's an error
     });
   });
+
+  it('it should suceed when community scanning a clean model', function(done: Mocha.Done) {
+    this.timeout(30000);
+
+    const tp = path.join(__dirname, 'community_scan_success.js');
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+    
+  });
 });
