@@ -53,6 +53,40 @@
         "defaultValue": "",
         "required": false,
         "helpMarkDown": "(required for SaaS only): Your HiddenLayer API Client Secret"
+      },
+      {
+        "name": "sarifFile",
+        "type": "string",
+        "label": "Path to output SARIF file",
+        "defaultValue": "",
+        "required": false,
+        "helpMarkDown": "Path to output SARIF file for GitHub integration"
+      },
+      {
+        "name": "communityScan",
+        "type": "pickList",
+        "label": "Community Scan Type",
+        "defaultValue": "",
+        "required": false,
+        "options": {
+          "": "None",
+          "HUGGING_FACE": "Hugging Face",
+          "AWS_PRESIGNED": "AWS Presigned URL",
+          "AWS_IAM_ROLE": "AWS IAM Role",
+          "AZURE_BLOB_SAS": "Azure Blob SAS",
+          "AZURE_BLOB_AD": "Azure Blob AD",
+          "GOOGLE_SIGNED": "Google Signed URL",
+          "GOOGLE_OAUTH": "Google OAuth"
+        },
+        "helpMarkDown": "Type of community scan to perform (e.g., Hugging Face models, cloud storage models)"
+      },
+      {
+        "name": "modelVersion",
+        "type": "string",
+        "label": "Model Version",
+        "defaultValue": "",
+        "required": false,
+        "helpMarkDown": "Version of the model (required for community scans other than Hugging Face, defaults to 'main' for Hugging Face)"
       }
 ],
   "execution": {
