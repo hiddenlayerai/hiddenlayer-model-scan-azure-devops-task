@@ -29,7 +29,7 @@ describe('Model Scanner task tests', function () {
       assert.equal(tr.warningIssues.length, 0, "should have no warnings");
       assert.equal(tr.errorIssues.length, 0, "should have no errors");
 
-      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results.sarif'), 'utf8'));
+      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_success.sarif'), 'utf8'));
       assert.equal(sarif.runs[0].results.length, 0, "should have no results");
 
       done();
@@ -50,7 +50,7 @@ describe('Model Scanner task tests', function () {
       assert.equal(tr.warningIssues.length, 0, "should have no warnings");
       assert.equal(tr.errorIssues.length, 1, "should have 1 error issue");
 
-      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results.sarif'), 'utf8'));
+      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_failure.sarif'), 'utf8'));
       const uri = sarif.runs[0].results[0].locations[0].physicalLocation.artifactLocation.uri;
       assert.ok(uri.startsWith('file://'), 'uri should start with file://');
 
@@ -74,7 +74,7 @@ describe('Model Scanner task tests', function () {
         console.log(tr.stdout);
         assert.match(tr.stdout, /scan status: done/);
 
-        const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results.sarif'), 'utf8'));
+        const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_folder_success.sarif'), 'utf8'));
         assert.equal(sarif.runs[0].results.length, 0, "should have no results");
 
         done();
@@ -95,7 +95,7 @@ describe('Model Scanner task tests', function () {
       assert.equal(tr.warningIssues.length, 0, "should have no warnings");
       assert.equal(tr.errorIssues.length, 1, "should have 1 error issue");
 
-      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results.sarif'), 'utf8'));
+      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_folder_failure.sarif'), 'utf8'));
       const uri = sarif.runs[0].results[0].locations[0].physicalLocation.artifactLocation.uri;
       assert.ok(uri.startsWith('file://'), 'uri should start with file://');
   
@@ -117,7 +117,7 @@ describe('Model Scanner task tests', function () {
       assert.equal(tr.warningIssues.length, 1, "should have 1 warning");
       assert.equal(tr.errorIssues.length, 0, "should have 0 errors");
 
-      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results.sarif'), 'utf8'));
+      const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_folder_failure_without_fail_on_detections.sarif'), 'utf8'));
       const uri = sarif.runs[0].results[0].locations[0].physicalLocation.artifactLocation.uri;
       assert.ok(uri.startsWith('file://'), 'uri should start with file://');
 
