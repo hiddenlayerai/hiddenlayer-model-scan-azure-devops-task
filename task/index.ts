@@ -41,6 +41,7 @@ async function run() {
         
         let results: ScanReportV3;
         
+        const modelPathUri = new URL(modelPath);
         // Handle community scanning first, similar to Python implementation
         if (communityScan) {
             let scanType: ScanJobAccessSourceEnum;
@@ -71,7 +72,7 @@ async function run() {
             }
             
             results = await client.modelScanner.communityScan(modelName, modelPath, scanType, version);
-        } else if (modelPath.startsWith("s3://")) {
+        } else if (modelPathUri.protocol === "s3:") {
             // Handle S3 model scanning
             const s3Path = modelPath.substring(5); // Remove "s3://" prefix
             const pathParts = s3Path.split('/');
@@ -83,7 +84,7 @@ async function run() {
             modelName = modelName || keyParts[keyParts.length - 1] || 'model';
             
             results = await client.modelScanner.scanS3Model(modelName, bucket, key);
-        } else if (modelPath.startsWith("https://") && modelPath.includes("blob.core.windows.net")) {
+        } else if (modelPathUri.protocol === "https:" && modelPathUri.hostname.endsWith("blob.core.windows.net")) {
             // Handle Azure Blob Storage model scanning
             const url = new URL(modelPath);
             const accountUrl = `${url.protocol}//${url.hostname}`;
