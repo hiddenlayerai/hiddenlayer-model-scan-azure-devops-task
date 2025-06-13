@@ -4,6 +4,15 @@ import tl = require('azure-pipelines-task-lib/task');
 import * as fs from 'fs';
 import * as path from 'path';
 
+function isValidUrl(string: string): boolean {
+    try {
+        new URL(string);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 async function run() {
     try {
         let modelName: string = tl.getInput('modelName', false) || "";
@@ -33,15 +42,8 @@ async function run() {
             }
         }
 
-        const splitResult = modelPath.split('/');
-        if (splitResult[splitResult.length - 1] === '' ) {
-            // model path was a folder, so get rid of extra element
-            splitResult.pop();
-        }
-        
         let results: ScanReportV3;
         
-        const modelPathUri = new URL(modelPath);
         // Handle community scanning first, similar to Python implementation
         if (communityScan) {
             let scanType: ScanJobAccessSourceEnum;
@@ -72,38 +74,57 @@ async function run() {
             }
             
             results = await client.modelScanner.communityScan(modelName, modelPath, scanType, version);
-        } else if (modelPathUri.protocol === "s3:") {
-            // Handle S3 model scanning
-            const s3Path = modelPath.substring(5); // Remove "s3://" prefix
-            const pathParts = s3Path.split('/');
-            const bucket = pathParts[0];
-            const key = pathParts.slice(1).join('/');
+        } else if (isValidUrl(modelPath)) {
+            // Parse URL once and reuse it
+            const modelPathUri = new URL(modelPath);
             
-            // Extract model name from the key (similar to Python implementation)
-            const keyParts = key.split('/');
-            modelName = modelName || keyParts[keyParts.length - 1] || 'model';
-            
-            results = await client.modelScanner.scanS3Model(modelName, bucket, key);
-        } else if (modelPathUri.protocol === "https:" && modelPathUri.hostname.endsWith("blob.core.windows.net")) {
-            // Handle Azure Blob Storage model scanning
-            const url = new URL(modelPath);
-            const accountUrl = `${url.protocol}//${url.hostname}`;
-            const pathParts = url.pathname.substring(1).split('/'); // Remove leading "/"
-            const container = pathParts[0];
-            const blob = pathParts.slice(1).join('/');
-            
-            // Extract model name from the blob path (similar to Python implementation)
-            const blobParts = blob.split('/');
-            modelName = modelName || blobParts[blobParts.length - 1] || 'model';
-            
-            results = await client.modelScanner.scanAzureBlobModel(
-                modelName, 
-                accountUrl, 
-                container, 
-                blob,
-                '',
-                azureBlobSasKey
-            );
+            if (modelPathUri.protocol === "s3:") {
+                // Handle S3 model scanning
+                const s3Path = modelPath.substring(5); // Remove "s3://" prefix
+                const pathParts = s3Path.split('/');
+                const bucket = pathParts[0];
+                const key = pathParts.slice(1).join('/');
+                
+                // Extract model name from the key (similar to Python implementation)
+                const keyParts = key.split('/');
+                modelName = modelName || keyParts[keyParts.length - 1] || 'model';
+                
+                results = await client.modelScanner.scanS3Model(modelName, bucket, key);
+            } else if (modelPathUri.protocol === "https:" && modelPathUri.hostname.endsWith("blob.core.windows.net")) {
+                // Handle Azure Blob Storage model scanning
+                const accountUrl = `${modelPathUri.protocol}//${modelPathUri.hostname}`;
+                const pathParts = modelPathUri.pathname.substring(1).split('/'); // Remove leading "/"
+                const container = pathParts[0];
+                const blob = pathParts.slice(1).join('/');
+                
+                // Extract model name from the blob path (similar to Python implementation)
+                const blobParts = blob.split('/');
+                modelName = modelName || blobParts[blobParts.length - 1] || 'model';
+                
+                results = await client.modelScanner.scanAzureBlobModel(
+                    modelName, 
+                    accountUrl, 
+                    container, 
+                    blob,
+                    '',
+                    azureBlobSasKey
+                );
+            } else {
+                // Handle local file/folder scanning for invalid URLs
+                const stats = fs.statSync(modelPath);
+                const splitResult = modelPath.split('/');
+                if (splitResult[splitResult.length - 1] === '' ) {
+                    // model path was a folder, so get rid of extra element
+                    splitResult.pop();
+                }
+                modelName = modelName || splitResult.pop() || 'model';
+                
+                if (stats.isDirectory()) {
+                    results = await client.modelScanner.scanFolder(modelName, modelPath);
+                } else {
+                    results = await client.modelScanner.scanFile(modelName, modelPath);
+                }
+            }
         } else {
             // Handle local file/folder scanning
             const stats = fs.statSync(modelPath);
