@@ -99,7 +99,8 @@ async function run() {
                 modelName, 
                 accountUrl, 
                 container, 
-                blob, 
+                blob,
+                '',
                 azureBlobSasKey
             );
         } else {

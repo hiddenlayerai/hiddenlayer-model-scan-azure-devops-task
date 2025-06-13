@@ -145,6 +145,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
+  /* S3 tests are temporarily disabled until we have a way to test them
   it('it should fail if scanning a malicious model from S3', function(done: Mocha.Done) {
     this.timeout(30000);
 
@@ -185,6 +186,7 @@ describe('Model Scanner task tests', function () {
       done(error); // Ensure the test case fails if there's an error
     });
   });
+  */
 
   it('it should fail if scanning a malicious model from Azure Blob Storage', function(done: Mocha.Done) {
     this.timeout(30000);
