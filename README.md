@@ -23,7 +23,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 
 `hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
 
-`modelVersion`: Optiona version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
+`modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
 
 `communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
 
