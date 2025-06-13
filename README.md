@@ -33,7 +33,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 | AZURE_BLOB_SAS       | Shared Access Signature (SAS) Azure Blobstore URL | N/A |
 | HUGGING_FACE         | Hugging Face repo | repo branch e.g. main |
 
-`azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage is communityScan is set to AZURE_BLOB_SAS
+`azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
 
 > Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Github Action runners can make network requests to the Model Scanner API.
 
