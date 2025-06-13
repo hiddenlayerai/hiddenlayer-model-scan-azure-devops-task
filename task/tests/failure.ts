@@ -12,5 +12,6 @@ tmr.setInput('apiUrl', env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
 tmr.setInput('failOnDetections', 'true');
+tmr.setInput('sarifFile', __dirname + '/results/results_failure.sarif');
 
 tmr.run();
