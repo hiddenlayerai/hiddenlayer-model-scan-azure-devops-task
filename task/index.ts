@@ -6,6 +6,7 @@ import * as path from 'path';
 
 async function run() {
     try {
+        let modelName: string = tl.getInput('modelName', false) || "";
         const apiUrl: string = tl.getInput('apiUrl', false) || "https://api.us.hiddenlayer.ai";
         const clientId: string = tl.getInput('hlClientId', false) || "";
         const clientSecret: string = tl.getInput('hlClientSecret', false) || "";
@@ -14,22 +15,9 @@ async function run() {
         const sarifFile: string = tl.getInput('sarifFile', false) || "";
         const communityScan: string = tl.getInput('communityScan', false) || "";
         const modelVersion: string = tl.getInput('modelVersion', false) || "";
+        const azureBlobSasKey: string = tl.getInput('azureBlobSasKey', false) || "";
 
         const client = HiddenLayerServiceClient.createSaaSClient(clientId, clientSecret, apiUrl);
-
-        if (sarifFile) {
-            try {
-                const sarifFileDir = path.dirname(path.resolve(sarifFile));
-                if (!fs.existsSync(sarifFileDir)) {
-                    fs.mkdirSync(sarifFileDir, { recursive: true });
-                }
-                else {
-                    await fs.promises.access(sarifFileDir, fs.constants.W_OK);
-                }
-            } catch {
-                throw new Error(`The current user does not have permissions to write to ${path.resolve(sarifFile)}`);
-            }
-        }
 
         if (sarifFile) {
             try {
@@ -50,7 +38,6 @@ async function run() {
             // model path was a folder, so get rid of extra element
             splitResult.pop();
         }
-        const modelName: string = splitResult.pop() || 'model';
         
         let results: ScanReportV3;
         
@@ -71,20 +58,8 @@ async function run() {
                 case 'AWS_PRESIGNED':
                     scanType = ScanJobAccessSourceEnum.AwsPresigned;
                     break;
-                case 'AWS_IAM_ROLE':
-                    scanType = ScanJobAccessSourceEnum.AwsIamRole;
-                    break;
                 case 'AZURE_BLOB_SAS':
                     scanType = ScanJobAccessSourceEnum.AzureBlobSas;
-                    break;
-                case 'AZURE_BLOB_AD':
-                    scanType = ScanJobAccessSourceEnum.AzureBlobAd;
-                    break;
-                case 'GOOGLE_SIGNED':
-                    scanType = ScanJobAccessSourceEnum.GoogleSigned;
-                    break;
-                case 'GOOGLE_OAUTH':
-                    scanType = ScanJobAccessSourceEnum.GoogleOauth;
                     break;
                 default:
                     throw new Error(`Unsupported community scan type: ${communityScan}`);
@@ -96,16 +71,54 @@ async function run() {
             }
             
             results = await client.modelScanner.communityScan(modelName, modelPath, scanType, version);
+        } else if (modelPath.startsWith("s3://")) {
+            // Handle S3 model scanning
+            const s3Path = modelPath.substring(5); // Remove "s3://" prefix
+            const pathParts = s3Path.split('/');
+            const bucket = pathParts[0];
+            const key = pathParts.slice(1).join('/');
+            
+            // Extract model name from the key (similar to Python implementation)
+            const keyParts = key.split('/');
+            modelName = modelName || keyParts[keyParts.length - 1] || 'model';
+            
+            results = await client.modelScanner.scanS3Model(modelName, bucket, key);
+        } else if (modelPath.startsWith("https://") && modelPath.includes("blob.core.windows.net")) {
+            // Handle Azure Blob Storage model scanning
+            const url = new URL(modelPath);
+            const accountUrl = `${url.protocol}//${url.hostname}`;
+            const pathParts = url.pathname.substring(1).split('/'); // Remove leading "/"
+            const container = pathParts[0];
+            const blob = pathParts.slice(1).join('/');
+            
+            // Extract model name from the blob path (similar to Python implementation)
+            const blobParts = blob.split('/');
+            modelName = modelName || blobParts[blobParts.length - 1] || 'model';
+            
+            results = await client.modelScanner.scanAzureBlobModel(
+                modelName, 
+                accountUrl, 
+                container, 
+                blob, 
+                azureBlobSasKey
+            );
         } else {
             // Handle local file/folder scanning
             const stats = fs.statSync(modelPath);
+            const splitResult = modelPath.split('/');
+            if (splitResult[splitResult.length - 1] === '' ) {
+                // model path was a folder, so get rid of extra element
+                splitResult.pop();
+            }
+            modelName = modelName || splitResult.pop() || 'model';
+            
             if (stats.isDirectory()) {
                 results = await client.modelScanner.scanFolder(modelName, modelPath);
             } else {
                 results = await client.modelScanner.scanFile(modelName, modelPath);
             }
         }
-        
+
         const anyDetected = await hasDetections(results);
         if (anyDetected) {
             const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
