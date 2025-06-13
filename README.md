@@ -23,15 +23,17 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 
 `hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
 
-`model_version`: version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
+`modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
 
-`community_scan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
+`communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
 
 | Community Scan Value | Description | Model Version |
 | -------------------- | ----------- | ------------- |
 | AWS_PRESIGNED        | Presigned S3 URL | N/A |
 | AZURE_BLOB_SAS       | Shared Access Signature (SAS) Azure Blobstore URL | N/A |
 | HUGGING_FACE         | Hugging Face repo | repo branch e.g. main |
+
+`azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
 
 > Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Github Action runners can make network requests to the Model Scanner API.
 
@@ -40,8 +42,6 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 `AWS_ACCESS_KEY_ID`: Required when scanning a model on S3 if not using self hosted runners with access to S3.
 
 `AWS_SECRET_ACCESS_KEY`: Required when scanning a model on S3 if not using self hosted runners with access to S3.
-
-`AZURE_BLOB_SAS_KEY`: Required when scanning a model file in a Azure Blob private container.
 
 `HUGGINGFACE_TOKEN`: Required if you want to scan private or licensed models.  
 
