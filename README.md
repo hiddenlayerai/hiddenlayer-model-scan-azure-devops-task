@@ -81,7 +81,7 @@ To scan a folder, you can add the following yaml to your pipeline:
 ```
 
 ```yaml
-#S3 Scan
+#Azure Blob Store Scan
 - task: ModelScanner (Dev)@0
   inputs:
     modelName: 'dev-azure-devops-azure-malicious-test'
