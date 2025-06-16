@@ -10,30 +10,35 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 * Click on "Browse Marketplace"
 * Search for "HiddenLayer Model Scanner"
 * Install the extension
+## Setup
+### Authentication:
 
-## Inputs
+* Navigate to your devops task
+* In the library create a new variable group - Remember name for next step
+* Add `HL_CLIENT_ID` and `HL_CLIENT_SECRET`
+    * If you have a HiddenLayer license these can be created in the HiddenLayer Admin Console  
 
-`modelPath` (required): Path to the model(s), can either be a path to a single model in the repo, or a folder containing the model(s) in the repo
+### Configuration
+* In your repository create a `azure-pipelines.yaml` file
+* Set variables with the group name assigned previously
+* Create a task and target the desired version
+* Setup inputs
 
-`apiUrl`: URL to the HiddenLayer API if you're using the OEM/self hosted version. Defaults to `https://api.us.hiddenlayer.ai`
+  * `modelPath` (required): Path to the model(s), can either be a path to a single model in the repo, or a folder containing the model(s) in the repo
+  * `apiUrl`: URL to the HiddenLayer API if you're using the OEM/self hosted version. Defaults to `https://api.us.hiddenlayer.ai`
+  * `failOnDetection`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`
+  * `hlClientID` (**required for SaaS only**): Your HiddenLayer API Client ID
+  * `hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
+  * `modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
+  * `sarifFile`: Path to SARIF output file. Compatible with github advanced security.
+  * `communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
+    | Community Scan Value | Description | Model Version |
+    | -------------------- | ----------- | ------------- |
+    | AWS_PRESIGNED        | Presigned S3 URL | N/A |
+    | AZURE_BLOB_SAS       | Shared Access Signature (SAS) Azure Blobstore URL | N/A |
+    | HUGGING_FACE         | Hugging Face repo | repo branch e.g. main |
 
-`failOnDetection`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`
-
-`hlClientID` (**required for SaaS only**): Your HiddenLayer API Client ID
-
-`hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
-
-`modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
-
-`communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
-
-| Community Scan Value | Description | Model Version |
-| -------------------- | ----------- | ------------- |
-| AWS_PRESIGNED        | Presigned S3 URL | N/A |
-| AZURE_BLOB_SAS       | Shared Access Signature (SAS) Azure Blobstore URL | N/A |
-| HUGGING_FACE         | Hugging Face repo | repo branch e.g. main |
-
-`azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
+  * `azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
 
 > Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Github Action runners can make network requests to the Model Scanner API.
 
@@ -50,6 +55,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 To scan a folder, you can add the following yaml to your pipeline:
 
 ```yaml
+#Folder
 - task: ModelScanner@0
   inputs:
     modelPath: 'models/'
@@ -57,6 +63,35 @@ To scan a folder, you can add the following yaml to your pipeline:
     failOnDetections: false
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
+    sarifFile: 'models/multi-scan-output.sarif'
+```
+
+```yaml
+#Community Scan
+- task: ModelScanner (Dev)@0
+  inputs:
+    modelName: 'dev-azure-devops-community-scanme'
+    modelPath: 'ScanMe/Models'
+    apiUrl: 'https://api.us.hiddenlayer.ai'
+    failOnDetection: false
+    sarifFile: security/output.sarif
+    communityScan: HUGGING_FACE
+    hlClientID: $(HL_CLIENT_ID)
+    hlClientSecret: $(HL_CLIENT_SECRET)
+```
+
+```yaml
+#S3 Scan
+- task: ModelScanner (Dev)@0
+  inputs:
+    modelName: 'dev-azure-devops-azure-malicious-test'
+    modelPath: '<blob-store-path>'
+    apiUrl: 'https://api.us.hiddenlayer.ai'
+    failOnDetection: false
+    sarifFile: security/output.sarif
+    hlClientID: $(HL_CLIENT_ID)
+    hlClientSecret: $(HL_CLIENT_SECRET)
+    azureBlobSasKey: $(AZURE_BLOB_STORE_KEY)
 ```
 
 Note: Make sure to bring in a variable group with the `HL_CLIENT_ID` and `HL_CLIENT_SECRET` variables.
