@@ -1,8 +1,0 @@
-{
-    "public": false,
-    "id": "model-scanner-task-dev",
-    "name": "HiddenLayer Model Scanner (dev)",
-    "description": "HiddenLayer Model Scanner for Azure DevOps (dev)",
-    "version": "0.4.5"
-  }
-  
