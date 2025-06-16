@@ -57,6 +57,8 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 
     * `modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
 
+    * `sarifFile`: Path to SARIF output file. Compatible with github advanced security.
+
     * `communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
 
     | Community Scan Value | Description | Model Version |
@@ -66,7 +68,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
     | HUGGING_FACE         | Hugging Face repo | repo branch e.g. main |
 
     * `azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
-    
+
     > Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Github Action runners can make network requests to the Model Scanner API.
 ### Sample Pipeline
 ```yaml
@@ -98,6 +100,7 @@ steps:
     failOnDetections: false
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
+    sarifFile: 'models/multi-scan-output.sarif'
 ```
 
 ### Optional Configuations

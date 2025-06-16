@@ -30,6 +30,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
   * `hlClientID` (**required for SaaS only**): Your HiddenLayer API Client ID
   * `hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
   * `modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
+  * `sarifFile`: Path to SARIF output file. Compatible with github advanced security.
   * `communityScan`: Optional parameter to enable the community scan capabilities in model scanner. If not specified model is uploaded to model scanner (Saas or on-prem). Possible values below
     | Community Scan Value | Description | Model Version |
     | -------------------- | ----------- | ------------- |
@@ -61,6 +62,7 @@ To scan a folder, you can add the following yaml to your pipeline:
     failOnDetections: false
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
+    sarifFile: 'models/multi-scan-output.sarif'
 ```
 
 Note: Make sure to bring in a variable group with the `HL_CLIENT_ID` and `HL_CLIENT_SECRET` variables.
