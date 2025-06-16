@@ -1,7 +1,7 @@
 {
   "scripts": {
     "package": "tfx extension create --manifest-globs vss-extension.json --output-path hiddenlayer.model-scanner-task.vsix",
-    "package-dev": "tfx extension create --manifest-globs vss-extension.json --overrides-file vss-extension-dev-overrides.json --output-path hiddenlayer.model-scanner-task-dev.vsix",
+    "package-dev": "tfx extension create --manifest-globs vss-extension-dev.json --output-path hiddenlayer.model-scanner-task-dev.vsix",
     "publish": "tfx extension publish --vsix hiddenlayer.model-scanner-task.vsix --token $PAT",
     "publish-dev": "tfx extension publish --vsix hiddenlayer.model-scanner-task-dev.vsix --token $PAT"
   },
