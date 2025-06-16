@@ -24,10 +24,10 @@
   },
   "files": [
     {
-        "path": "task/*.ts"
+        "path": "task/index.ts"
     },
     {
-        "path": "task/*.js"
+        "path": "task/index.js"
     },
     {
         "path": "task/package-lock.json"
@@ -40,6 +40,9 @@
     },
     {
         "path": "task/task.json"
+    },
+    {
+        "path": "task/node_modules"
     }
   ],
   "contributions": [
