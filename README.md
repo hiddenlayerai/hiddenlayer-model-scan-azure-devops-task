@@ -55,6 +55,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 To scan a folder, you can add the following yaml to your pipeline:
 
 ```yaml
+#Folder
 - task: ModelScanner@0
   inputs:
     modelPath: 'models/'
@@ -63,6 +64,34 @@ To scan a folder, you can add the following yaml to your pipeline:
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
     sarifFile: 'models/multi-scan-output.sarif'
+```
+
+```yaml
+#Community Scan
+- task: ModelScanner (Dev)@0
+  inputs:
+    modelName: 'dev-azure-devops-community-scanme'
+    modelPath: 'ScanMe/Models'
+    apiUrl: 'https://api.us.hiddenlayer.ai'
+    failOnDetection: false
+    sarifFile: security/output.sarif
+    communityScan: HUGGING_FACE
+    hlClientID: $(HL_CLIENT_ID)
+    hlClientSecret: $(HL_CLIENT_SECRET)
+```
+
+```yaml
+#S3 Scan
+- task: ModelScanner (Dev)@0
+  inputs:
+    modelName: 'dev-azure-devops-azure-malicious-test'
+    modelPath: '<blob-store-path>'
+    apiUrl: 'https://api.us.hiddenlayer.ai'
+    failOnDetection: false
+    sarifFile: security/output.sarif
+    hlClientID: $(HL_CLIENT_ID)
+    hlClientSecret: $(HL_CLIENT_SECRET)
+    azureBlobSasKey: $(AZURE_BLOB_STORE_KEY)
 ```
 
 Note: Make sure to bring in a variable group with the `HL_CLIENT_ID` and `HL_CLIENT_SECRET` variables.
