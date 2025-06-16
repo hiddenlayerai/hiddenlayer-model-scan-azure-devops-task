@@ -1,8 +1,9 @@
+
 {
   "manifestVersion": 1,
-  "public": true,
-  "id": "model-scanner-task",
-  "name": "HiddenLayer Model Scanner",
+  "public": false,
+  "id": "model-scanner-task-dev",
+  "name": "HiddenLayer Model Scanner (Dev)",
   "version": "0.4.5",
   "publisher": "hiddenlayer",
   "targets": [
@@ -38,9 +39,10 @@
     {
         "path": "task/tsconfig.json"
     },
-    {
-        "path": "task/task.json"
-    }
+      {
+          "path": "task/task-dev.json",
+          "packagePath": "task.json"
+      }
   ],
   "contributions": [
       {
