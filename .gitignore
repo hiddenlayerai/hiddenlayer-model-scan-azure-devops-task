@@ -10,3 +10,5 @@ node_modules
 task/tests/results/
 
 *.map
+
+.DS_Store
