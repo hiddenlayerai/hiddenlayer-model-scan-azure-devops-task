@@ -8,9 +8,9 @@
     "category": "Utility",
     "author": "HiddenLayer",
     "version": {
-        "Major": 0,
-        "Minor": 4,
-        "Patch": 7
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 1
     },
     "instanceNameFormat": "HiddenLayer Model Scan for $(modelPath)",
     "inputs": [

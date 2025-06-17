@@ -8,8 +8,8 @@
   "category": "Utility",
   "author": "HiddenLayer",
   "version": {
-      "Major": 0,
-      "Minor": 5,
+      "Major": 1,
+      "Minor": 0,
       "Patch": 0
   },
   "instanceNameFormat": "HiddenLayer Model Scan for $(modelPath)",
