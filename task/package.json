@@ -1,6 +1,6 @@
 {
   "name": "Model Scanner",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "description": "HiddenLayer Model Scanner for Azure DevOps",
   "dependencies": {
-    "@hiddenlayerai/hiddenlayer-sdk": "^2.0.3",
+    "@hiddenlayerai/hiddenlayer-sdk": "^2.0.4",
     "azure-pipelines-task-lib": "^4.17.0"
   },
   "devDependencies": {
