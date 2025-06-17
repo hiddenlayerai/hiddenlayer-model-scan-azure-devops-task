@@ -84,7 +84,7 @@ variables:
 - name: System.Debug
   value: true
 steps:
-- task: ModelScanner@0 #Select version
+- task: ModelScanner@1 #Select version
   inputs:
     #Single file example
     modelPath: 'safe_model.pkl'
@@ -104,7 +104,7 @@ steps:
 ```
 ```yaml
 #Community Scan
-- task: ModelScanner@0
+- task: ModelScanner@1
   inputs:
     modelName: 'dev-azure-devops-community-scanme'
     modelPath: 'ScanMe/Models'
@@ -118,7 +118,7 @@ steps:
 
 ```yaml
 #Azure Blob Store Scan
-- task: ModelScanner@0
+- task: ModelScanner@1
   inputs:
     modelName: 'dev-azure-devops-azure-malicious-test'
     modelPath: '<blob-store-path>'
