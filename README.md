@@ -68,7 +68,7 @@ To scan a folder, you can add the following yaml to your pipeline:
 
 ```yaml
 #Community Scan
-- task: ModelScanner (Dev)@0
+- task: ModelScanner@0
   inputs:
     modelName: 'dev-azure-devops-community-scanme'
     modelPath: 'ScanMe/Models'
@@ -82,7 +82,7 @@ To scan a folder, you can add the following yaml to your pipeline:
 
 ```yaml
 #Azure Blob Store Scan
-- task: ModelScanner (Dev)@0
+- task: ModelScanner@0
   inputs:
     modelName: 'dev-azure-devops-azure-malicious-test'
     modelPath: '<blob-store-path>'
