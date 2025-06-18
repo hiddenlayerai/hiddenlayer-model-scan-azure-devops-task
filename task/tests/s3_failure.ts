@@ -11,6 +11,6 @@ tmr.setInput('modelPath', 's3://hl-oss-integration-tests/example_models/maliciou
 tmr.setInput('apiUrl', env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
-tmr.setInput('failOnDetections', 'true');
+tmr.setInput('failOnDetection', 'true');
 
 tmr.run(); 

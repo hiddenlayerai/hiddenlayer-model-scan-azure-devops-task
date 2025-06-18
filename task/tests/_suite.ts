@@ -105,7 +105,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
-  it('it should succeed with warnings if scanning a folder with a malicious model and failOnDetections is false', function(done: Mocha.Done) {
+  it('it should succeed with warnings if scanning a folder with a malicious model and failOnDetection is false', function(done: Mocha.Done) {
     this.timeout(30000);
 
     const tp = path.join(__dirname, 'folder_failure_without_fail_on_detections.js');
@@ -127,7 +127,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
-  it('it should succeed when community scanning a malicious model but failOnDetections is false', function(done: Mocha.Done) {
+  it('it should succeed when community scanning a malicious model but failOnDetection is false', function(done: Mocha.Done) {
     this.timeout(30000);
 
     const tp = path.join(__dirname, 'community_scan_success_without_fail_on_detections.js');
@@ -164,7 +164,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
-  it('it should succeed with warnings if scanning a malicious model from S3 and failOnDetections is false', function(done: Mocha.Done) {
+  it('it should succeed with warnings if scanning a malicious model from S3 and failOnDetection is false', function(done: Mocha.Done) {
     this.timeout(30000);
 
     const tp = path.join(__dirname, 's3_failure_without_fail_on_detections.js');
@@ -206,7 +206,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
-  it('it should succeed with warnings if scanning a malicious model from Azure Blob Storage and failOnDetections is false', function(done: Mocha.Done) {
+  it('it should succeed with warnings if scanning a malicious model from Azure Blob Storage and failOnDetection is false', function(done: Mocha.Done) {
     this.timeout(30000);
 
     const tp = path.join(__dirname, 'azure_failure_without_fail_on_detections.js');

@@ -12,7 +12,7 @@ tmr.setInput('modelPath', 'ScanMe/Models');
 tmr.setInput('apiUrl', process.env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', process.env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', process.env['HL_CLIENT_SECRET'] || '');
-tmr.setInput('failOnDetections', 'false');
+tmr.setInput('failOnDetection', 'false');
 tmr.setInput('sarifFile', __dirname + '/results/results_community_scan_success_without_fail_on_detections.sarif');
 tmr.setInput('communityScan', 'HUGGING_FACE');
 tmr.setInput('modelVersion', 'main');
