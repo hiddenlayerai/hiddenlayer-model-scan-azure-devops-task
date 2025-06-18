@@ -89,7 +89,7 @@ steps:
     #Single file example
     modelPath: 'safe_model.pkl'
     apiUrl: '<hiddenlayer_api_url>'
-    failOnDetections: true
+    failOnDetection: true
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
 - task: ModelScanner@0 #Select version
@@ -97,7 +97,7 @@ steps:
     #Folder example
     modelPath: 'models/'
     apiUrl: '<hiddenlayer_api_url>'
-    failOnDetections: false
+    failOnDetection: false
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
     sarifFile: 'models/multi-scan-output.sarif'

@@ -20,7 +20,7 @@ async function run() {
         const clientId: string = tl.getInput('hlClientId', false) || "";
         const clientSecret: string = tl.getInput('hlClientSecret', false) || "";
         const modelPath: string = tl.getInput('modelPath', true) || "";
-        const failOnDetections: boolean = tl.getBoolInput('failOnDetections', false);
+        const failOnDetection: boolean = tl.getBoolInput('failOnDetection', false);
         const sarifFile: string = tl.getInput('sarifFile', false) || "";
         const communityScan: string = tl.getInput('communityScan', false) || "";
         const modelVersion: string = tl.getInput('modelVersion', false) || "";
@@ -144,7 +144,7 @@ async function run() {
 
         const anyDetected = await hasDetections(results);
         if (anyDetected) {
-            const taskResult = failOnDetections ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
+            const taskResult = failOnDetection ? tl.TaskResult.Failed : tl.TaskResult.SucceededWithIssues;
             tl.setResult(taskResult, 'One or more models failed one or more safety checks.');
         } else {
             tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');

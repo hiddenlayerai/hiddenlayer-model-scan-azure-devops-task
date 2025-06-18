@@ -60,7 +60,7 @@ To scan a folder, you can add the following yaml to your pipeline:
   inputs:
     modelPath: 'models/'
     apiUrl: 'https://api.us.hiddenlayer.ai'
-    failOnDetections: false
+    failOnDetection: false
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)
     sarifFile: 'models/multi-scan-output.sarif'
