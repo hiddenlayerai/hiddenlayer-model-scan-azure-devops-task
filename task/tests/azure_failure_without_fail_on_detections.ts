@@ -11,7 +11,7 @@ tmr.setInput('modelPath', 'https://hiddenlayeraitestfiles.blob.core.windows.net/
 tmr.setInput('apiUrl', env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
-tmr.setInput('failOnDetection', 'false');
+tmr.setInput('failOnDetections', 'false');
 tmr.setInput('azureBlobSasKey', env['AZURE_BLOB_SAS_KEY'] || '');
 
 tmr.run(); 

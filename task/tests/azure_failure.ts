@@ -12,6 +12,6 @@ tmr.setInput('apiUrl', env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
 tmr.setInput('azureBlobSasKey', env['AZURE_BLOB_SAS_KEY'] || '');
-tmr.setInput('failOnDetection', 'true');
+tmr.setInput('failOnDetections', 'true');
 
 tmr.run(); 
