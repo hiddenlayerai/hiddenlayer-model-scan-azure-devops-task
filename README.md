@@ -26,7 +26,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 
   * `modelPath` (required): Path to the model(s), can either be a path to a single model in the repo, or a folder containing the model(s) in the repo
   * `apiUrl`: URL to the HiddenLayer API if you're using the OEM/self hosted version. Defaults to `https://api.us.hiddenlayer.ai`
-  * `failOnDetection`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`
+  * `failOnDetections`: True to fail the pipeline if a model is deemed malicious. Defaults to `False`
   * `hlClientID` (**required for SaaS only**): Your HiddenLayer API Client ID
   * `hlClientSecret` (**required for SaaS only**): Your HiddenLayer API Client Secret
   * `modelVersion`: Optional version of model to scan for community scan, e.g. main branch etc. Defaults to main for community scan
@@ -73,7 +73,7 @@ To scan a folder, you can add the following yaml to your pipeline:
     modelName: 'dev-azure-devops-community-scanme'
     modelPath: 'ScanMe/Models'
     apiUrl: 'https://api.us.hiddenlayer.ai'
-    failOnDetection: false
+    failOnDetections: false
     sarifFile: security/output.sarif
     communityScan: HUGGING_FACE
     hlClientID: $(HL_CLIENT_ID)
@@ -87,7 +87,7 @@ To scan a folder, you can add the following yaml to your pipeline:
     modelName: 'dev-azure-devops-azure-malicious-test'
     modelPath: '<blob-store-path>'
     apiUrl: 'https://api.us.hiddenlayer.ai'
-    failOnDetection: false
+    failOnDetections: false
     sarifFile: security/output.sarif
     hlClientID: $(HL_CLIENT_ID)
     hlClientSecret: $(HL_CLIENT_SECRET)

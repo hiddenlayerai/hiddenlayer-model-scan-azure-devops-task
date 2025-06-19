@@ -10,7 +10,7 @@
   "version": {
       "Major": 1,
       "Minor": 0,
-      "Patch": 0
+      "Patch": 2
   },
   "instanceNameFormat": "HiddenLayer Model Scan for $(modelPath)",
   "inputs": [
@@ -39,7 +39,7 @@
         "helpMarkDown": "URL to the HiddenLayer API"
       },
       {
-        "name": "failOnDetection",
+        "name": "failOnDetections",
         "type": "boolean",
         "label": "True to fail the pipeline if a model is deemed malicious",
         "defaultValue": true,
