@@ -193,15 +193,27 @@ interface SarifOutput {
     }>;
 }
 
-function makeGithubCompatibleSarif(sarifOutput: string): string {
-    const sarif: SarifOutput = JSON.parse(sarifOutput);
+function makeGithubCompatibleSarif(sarifOutput: string | object): string {
+    const sarif: SarifOutput = typeof sarifOutput === 'string' ? JSON.parse(sarifOutput) : sarifOutput as SarifOutput;
     for (const run of sarif.runs) {
         for (const result of run.results || []) {
             for (const location of result.locations || []) {
                 if (location.physicalLocation?.artifactLocation?.uri) {
-                    const uri = new URL(location.physicalLocation.artifactLocation.uri);
-                    uri.protocol = 'file:';
-                    location.physicalLocation.artifactLocation.uri = uri.toString();
+                    const originalUri = location.physicalLocation.artifactLocation.uri;
+                    // Only try to convert URIs that look like valid URLs
+                    if (isValidUrl(originalUri)) {
+                        try {
+                            const uri = new URL(originalUri);
+                            uri.protocol = 'file:';
+                            location.physicalLocation.artifactLocation.uri = uri.toString();
+                        } catch {
+                            // If URL parsing fails, prefix with file://
+                            location.physicalLocation.artifactLocation.uri = `file://${originalUri}`;
+                        }
+                    } else {
+                        // For non-URL paths, prefix with file://
+                        location.physicalLocation.artifactLocation.uri = `file://${originalUri}`;
+                    }
                 }
             }
         }
