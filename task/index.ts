@@ -74,6 +74,15 @@ async function run() {
                 throw new Error('When running a community scan other than a Hugging Face model, you must provide a model version.');
             }
             
+            // Derive modelName from modelPath if not explicitly provided
+            if (!modelName) {
+                const splitResult = modelPath.split('/');
+                if (splitResult[splitResult.length - 1] === '') {
+                    splitResult.pop();
+                }
+                modelName = splitResult.pop() || 'model';
+            }
+            
             results = await client.communityScanner.communityScan({
                 modelName,
                 modelPath,
