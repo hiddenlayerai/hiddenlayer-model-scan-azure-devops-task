@@ -61,6 +61,6 @@ jobs:
         working-directory: ./task
         run: npm run test
         env:
-          HL_CLIENT_ID: ${{ secrets.HL_CLIENT_ID }}
-          HL_CLIENT_SECRET: ${{ secrets.HL_CLIENT_SECRET }}
+          HIDDENLAYER_CLIENT_ID: ${{ env.HIDDENLAYER_CLIENT_ID }}
+          HIDDENLAYER_CLIENT_SECRET: ${{ secrets.HIDDENLAYER_CLIENT_SECRET }}
           AZURE_BLOB_SAS_KEY: ${{ secrets.AZURE_BLOB_SAS_KEY }}
