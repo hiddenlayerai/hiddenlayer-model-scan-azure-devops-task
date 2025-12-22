@@ -102,7 +102,7 @@ async function run() {
                 });
             } else if (modelPathUri.protocol === "https:" && modelPathUri.hostname.endsWith("blob.core.windows.net")) {
                 // Handle Azure Blob Storage model scanning
-                const accountUrl = `${modelPathUri.protocol}//${modelPathUri.hostname}?${azureBlobSasKey}`;
+                const accountUrl = `${modelPathUri.protocol}//${modelPathUri.hostname}${azureBlobSasKey ? `?${azureBlobSasKey}` : ''}`;
                 const pathParts = modelPathUri.pathname.substring(1).split('/'); // Remove leading "/"
                 const container = pathParts[0];
                 const blob = pathParts.slice(1).join('/');
