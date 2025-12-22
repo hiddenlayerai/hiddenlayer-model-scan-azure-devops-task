@@ -135,8 +135,8 @@ describe('Model Scanner task tests', function () {
     tr.runAsync().then(() => {
       console.log(tr);
       assert.equal(tr.succeeded, true, 'should have succeeded');
-      assert.equal(tr.warningIssues.length, 0, "should have no warnings");
-      assert.equal(tr.errorIssues.length, 1, "should have 1 error issue");
+      assert.equal(tr.warningIssues.length, 1, "should have 1 warning");
+      assert.equal(tr.errorIssues.length, 0, "should have 0 errors");
   
       done();
     }).catch((error) => {
