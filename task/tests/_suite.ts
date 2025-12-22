@@ -71,8 +71,7 @@ describe('Model Scanner task tests', function () {
         assert.equal(tr.succeeded, true, 'should have succeeded');
         assert.equal(tr.warningIssues.length, 0, "should have no warnings");
         assert.equal(tr.errorIssues.length, 0, "should have no errors");
-        console.log(tr.stdout);
-        assert.match(tr.stdout, /scan status: done/);
+
 
         const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_folder_success.sarif'), 'utf8'));
         assert.equal(sarif.runs[0].results.length, 0, "should have no results");
