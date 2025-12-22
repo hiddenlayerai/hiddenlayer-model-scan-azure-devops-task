@@ -1,4 +1,5 @@
-import { HiddenLayerServiceClient, ScanReportV3, ResponseError, Sarif210, ScanJobAccessSourceEnum } from '@hiddenlayerai/hiddenlayer-sdk';
+import { HiddenLayer, CommunityScanSource, APIError } from '@hiddenlayerai/hiddenlayer-sdk';
+import type { ScanReport } from '@hiddenlayerai/hiddenlayer-sdk/resources/scans/results';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import tl = require('azure-pipelines-task-lib/task');
 import * as fs from 'fs';
@@ -26,7 +27,7 @@ async function run() {
         const modelVersion: string = tl.getInput('modelVersion', false) || "";
         const azureBlobSasKey: string = tl.getInput('azureBlobSasKey', false) || "";
 
-        const client = HiddenLayerServiceClient.createSaaSClient(clientId, clientSecret, apiUrl);
+        const client = new HiddenLayer({ clientID: clientId, clientSecret: clientSecret, baseURL: apiUrl });
 
         if (sarifFile) {
             try {
@@ -42,27 +43,27 @@ async function run() {
             }
         }
 
-        let results: ScanReportV3;
+        let results: ScanReport;
         
         // Handle community scanning first, similar to Python implementation
         if (communityScan) {
-            let scanType: ScanJobAccessSourceEnum;
+            let scanSource: string;
             let version: string = modelVersion;
             
-            // Map community scan types to SDK enum values
+            // Map community scan types to SDK constants
             switch (communityScan) {
                 case 'HUGGING_FACE':
-                    scanType = ScanJobAccessSourceEnum.HuggingFace;
+                    scanSource = CommunityScanSource.HUGGING_FACE;
                     // Default to 'main' for Hugging Face if no version specified
                     if (!version) {
                         version = 'main';
                     }
                     break;
                 case 'AWS_PRESIGNED':
-                    scanType = ScanJobAccessSourceEnum.AwsPresigned;
+                    scanSource = CommunityScanSource.AWS_PRESIGNED;
                     break;
                 case 'AZURE_BLOB_SAS':
-                    scanType = ScanJobAccessSourceEnum.AzureBlobSas;
+                    scanSource = CommunityScanSource.AZURE_BLOB_SAS;
                     break;
                 default:
                     throw new Error(`Unsupported community scan type: ${communityScan}`);
@@ -73,7 +74,12 @@ async function run() {
                 throw new Error('When running a community scan other than a Hugging Face model, you must provide a model version.');
             }
             
-            results = await client.modelScanner.communityScan(modelName, modelPath, scanType, version);
+            results = await client.communityScanner.communityScan({
+                modelName,
+                modelPath,
+                modelSource: scanSource,
+                modelVersion: version
+            });
         } else if (isValidUrl(modelPath)) {
             // Parse URL once and reuse it
             const modelPathUri = new URL(modelPath);
@@ -89,7 +95,11 @@ async function run() {
                 const keyParts = key.split('/');
                 modelName = modelName || keyParts[keyParts.length - 1] || 'model';
                 
-                results = await client.modelScanner.scanS3Model(modelName, bucket, key);
+                results = await client.modelScanner.scanS3Model({
+                    modelName,
+                    bucket,
+                    key
+                });
             } else if (modelPathUri.protocol === "https:" && modelPathUri.hostname.endsWith("blob.core.windows.net")) {
                 // Handle Azure Blob Storage model scanning
                 const accountUrl = `${modelPathUri.protocol}//${modelPathUri.hostname}`;
@@ -101,14 +111,13 @@ async function run() {
                 const blobParts = blob.split('/');
                 modelName = modelName || blobParts[blobParts.length - 1] || 'model';
                 
-                results = await client.modelScanner.scanAzureBlobModel(
+                results = await client.modelScanner.scanAzureBlobModel({
                     modelName, 
                     accountUrl, 
                     container, 
                     blob,
-                    '',
-                    azureBlobSasKey
-                );
+                    credential: azureBlobSasKey || undefined
+                });
             } else {
                 // Handle local file/folder scanning for invalid URLs
                 const stats = fs.statSync(modelPath);
@@ -120,9 +129,9 @@ async function run() {
                 modelName = modelName || splitResult.pop() || 'model';
                 
                 if (stats.isDirectory()) {
-                    results = await client.modelScanner.scanFolder(modelName, modelPath);
+                    results = await client.modelScanner.scanFolder({ modelName, path: modelPath });
                 } else {
-                    results = await client.modelScanner.scanFile(modelName, modelPath);
+                    results = await client.modelScanner.scanFile({ modelName, modelPath });
                 }
             }
         } else {
@@ -136,9 +145,9 @@ async function run() {
             modelName = modelName || splitResult.pop() || 'model';
             
             if (stats.isDirectory()) {
-                results = await client.modelScanner.scanFolder(modelName, modelPath);
+                results = await client.modelScanner.scanFolder({ modelName, path: modelPath });
             } else {
-                results = await client.modelScanner.scanFile(modelName, modelPath);
+                results = await client.modelScanner.scanFile({ modelName, modelPath });
             }
         }
 
@@ -150,29 +159,43 @@ async function run() {
             tl.setResult(tl.TaskResult.Succeeded, 'Models are safe. No safety checks failed.');
         }
         if (sarifFile) {
-            const sarifOutput = await client.modelScanner.getSarifResults(results.scanId);
+            const sarifOutput = await client.scans.results.sarif(results.scan_id);
             const githubCompatibleSarif = makeGithubCompatibleSarif(sarifOutput);
-            await fs.promises.writeFile(sarifFile, JSON.stringify(githubCompatibleSarif));
+            await fs.promises.writeFile(sarifFile, githubCompatibleSarif);
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (err:any) {
-        if (err instanceof ResponseError) {
-            const body = await err.response.json();
-            tl.setResult(tl.TaskResult.Failed, err.message + ' status code: ' + err.response.status + ' body: ' + JSON.stringify(body));
+        if (err instanceof APIError) {
+            tl.setResult(tl.TaskResult.Failed, err.message + ' status code: ' + err.status + ' body: ' + JSON.stringify(err.error));
         } else {
             tl.setResult(tl.TaskResult.Failed, err.message);
         }
     }
 }
 
-async function hasDetections(scanReport: ScanReportV3): Promise<boolean> {
-    console.log(`Model failed ${scanReport.detectionCount} safety checks.`);
-    return scanReport.detectionCount > 0;
+async function hasDetections(scanReport: ScanReport): Promise<boolean> {
+    console.log(`Model failed ${scanReport.summary?.detection_count || 0} safety checks.`);
+    return (scanReport.summary?.detection_count || 0) > 0;
 }
 
-function makeGithubCompatibleSarif(sarifOutput: Sarif210): Sarif210 {
-    for (const run of sarifOutput.runs) {
+interface SarifOutput {
+    runs: Array<{
+        results?: Array<{
+            locations?: Array<{
+                physicalLocation?: {
+                    artifactLocation?: {
+                        uri?: string;
+                    };
+                };
+            }>;
+        }>;
+    }>;
+}
+
+function makeGithubCompatibleSarif(sarifOutput: string): string {
+    const sarif: SarifOutput = JSON.parse(sarifOutput);
+    for (const run of sarif.runs) {
         for (const result of run.results || []) {
             for (const location of result.locations || []) {
                 if (location.physicalLocation?.artifactLocation?.uri) {
@@ -183,7 +206,7 @@ function makeGithubCompatibleSarif(sarifOutput: Sarif210): Sarif210 {
             }
         }
     }
-    return sarifOutput;
+    return JSON.stringify(sarif);
 }
 
 run();
