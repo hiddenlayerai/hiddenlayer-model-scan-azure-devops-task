@@ -4,7 +4,7 @@
   "public": false,
   "id": "model-scanner-task-dev",
   "name": "HiddenLayer Model Scanner (Dev)",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "publisher": "hiddenlayer",
   "targets": [
       {
