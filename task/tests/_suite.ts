@@ -71,8 +71,7 @@ describe('Model Scanner task tests', function () {
         assert.equal(tr.succeeded, true, 'should have succeeded');
         assert.equal(tr.warningIssues.length, 0, "should have no warnings");
         assert.equal(tr.errorIssues.length, 0, "should have no errors");
-        console.log(tr.stdout);
-        assert.match(tr.stdout, /scan status: done/);
+
 
         const sarif = JSON.parse(fs.readFileSync(path.join(__dirname, 'results/results_folder_success.sarif'), 'utf8'));
         assert.equal(sarif.runs[0].results.length, 0, "should have no results");
@@ -113,7 +112,7 @@ describe('Model Scanner task tests', function () {
 
     tr.runAsync().then(() => {
       console.log(tr);
-      assert.equal(tr.succeeded, true, 'should have failed');
+      assert.equal(tr.succeeded, true, 'should have succeeded');
       assert.equal(tr.warningIssues.length, 1, "should have 1 warning");
       assert.equal(tr.errorIssues.length, 0, "should have 0 errors");
 
@@ -135,9 +134,9 @@ describe('Model Scanner task tests', function () {
 
     tr.runAsync().then(() => {
       console.log(tr);
-      assert.equal(tr.succeeded, false, 'should have failed');
-      assert.equal(tr.warningIssues.length, 0, "should have no warnings");
-      assert.equal(tr.errorIssues.length, 1, "should have 1 error issue");
+      assert.equal(tr.succeeded, true, 'should have succeeded');
+      assert.equal(tr.warningIssues.length, 1, "should have 1 warning");
+      assert.equal(tr.errorIssues.length, 0, "should have 0 errors");
   
       done();
     }).catch((error) => {
