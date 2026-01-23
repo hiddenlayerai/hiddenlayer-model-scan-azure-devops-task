@@ -8,7 +8,7 @@ const taskPath = path.join(__dirname, '..', 'index.js');
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 console.log(__dirname);
-tmr.setInput('modelPath', 'ScanMe/Models');
+tmr.setInput('modelPath', 'ScanMe/test-models');
 tmr.setInput('apiUrl', process.env['HL_API_URL'] || 'https://api.us.hiddenlayer.ai');
 tmr.setInput('hlClientID', process.env['HL_CLIENT_ID'] || '');
 tmr.setInput('hlClientSecret', process.env['HL_CLIENT_SECRET'] || '');
@@ -17,4 +17,4 @@ tmr.setInput('sarifFile', __dirname + '/results/results_community_scan_success_w
 tmr.setInput('communityScan', 'HUGGING_FACE');
 tmr.setInput('modelVersion', 'main');
 
-tmr.run(); 
+tmr.run();

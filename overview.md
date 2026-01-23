@@ -107,7 +107,7 @@ steps:
 - task: ModelScanner@1
   inputs:
     modelName: 'dev-azure-devops-community-scanme'
-    modelPath: 'ScanMe/Models'
+    modelPath: 'ScanMe/test-models'
     apiUrl: 'https://api.us.hiddenlayer.ai'
     failOnDetections: false
     sarifFile: security/output.sarif
