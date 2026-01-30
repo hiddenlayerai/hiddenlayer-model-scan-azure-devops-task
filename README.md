@@ -40,7 +40,7 @@ To use this Azure DevOps task, you must install it into your Azure DevOps organi
 
   * `azureBlobSasKey`: Optional Azure SAS token for accessing Azure Blob Storage if an Azure Blob Store URL is passed (different than community scan)
 
-> Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Github Action runners can make network requests to the Model Scanner API.
+> Note: For customers using the Enterprise Self Hosted Model Scanner, please ensure your Azure Pipelines agents can make network requests to the Model Scanner API.
 
 ## Environment Variables
 
