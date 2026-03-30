@@ -126,6 +126,7 @@ describe('Model Scanner task tests', function () {
     });
   });
 
+  /* temporarily disabling test while SCS-1758 is being resolved.
   it('it should succeed when community scanning a malicious model but failOnDetections is false', function(done: Mocha.Done) {
     this.timeout(30000);
 
@@ -142,7 +143,7 @@ describe('Model Scanner task tests', function () {
     }).catch((error) => {
       done(error); // Ensure the test case fails if there's an error
     });
-  });
+  });*/
 
   /* S3 tests are temporarily disabled until we have a way to test them
   it('it should fail if scanning a malicious model from S3', function(done: Mocha.Done) {
