@@ -14,4 +14,4 @@ tmr.setInput('hlClientSecret', env['HL_CLIENT_SECRET'] || '');
 tmr.setInput('failOnDetections', 'false');
 tmr.setInput('azureBlobSasKey', env['AZURE_BLOB_SAS_KEY'] || '');
 
-tmr.run(); 
+tmr.run();
