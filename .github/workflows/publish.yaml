@@ -3,7 +3,7 @@ name: Release & Publish
 on:
   release:
     types:
-      - published
+      - released
 
 permissions:
   contents: read
